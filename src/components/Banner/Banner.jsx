@@ -1,6 +1,7 @@
 import { Container, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles'; 
+import { makeStyles } from '@mui/styles';
 import React from 'react'
+import Carousel from './Carousel';
 
 const useStyles= makeStyles(()=>({
   banner: {
@@ -33,7 +34,7 @@ const Banner = () => {
 
   return <div className={classes.banner}>
     <Container className={classes.bannerContent}>
-      <div className={classes.tagLine}>
+    <div className={classes.tagline}>
         <Typography
           variant='h2'
           style={{
@@ -56,6 +57,7 @@ const Banner = () => {
         </Typography>
 
       </div>
+      <Carousel/>
     </Container>
 
   </div>
