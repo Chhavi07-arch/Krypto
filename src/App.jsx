@@ -1,34 +1,25 @@
-import React from 'react';
-import "./App.css";
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Header from  './components/Header';
-import Homepage from './Pages/Homepage';
-import CoinPage from './Pages/CoinPage';
-import { makeStyles } from '@mui/styles';
-
-const useStyles= makeStyles(() => ({
-  App: {
-    backgroundColor: "#14161a",
-    color: "white",
-    minHeight: "100vh",
-  },
-}));
+// src/App.jsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { FavoritesProvider } from './context/FavoritesContext';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Rates from './pages/Rates';
+import News from './pages/News';
+import Learn from './pages/Learn';
 
 function App() {
-
-  const classes =useStyles();
-
   return (
-    
-    <BrowserRouter>
-    <div className={classes.App}>
-      <Header/>
-      <Routes>
-      <Route path="/" element={<Homepage />}  />
-      <Route path="/coins/:id" element={<CoinPage />} />
-      </Routes>
-      </div>
-    </BrowserRouter>
+    <FavoritesProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/rates" element={<Rates />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/learn" element={<Learn />} />
+        </Routes>
+      </BrowserRouter>
+    </FavoritesProvider>
   );
 }
 

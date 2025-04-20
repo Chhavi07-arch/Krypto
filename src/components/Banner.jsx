@@ -1,67 +1,41 @@
-import { Container, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import React from 'react'
-import Carousel from './Banner/Carousel';
+// src/components/Banner.jsx
+import { Box, Typography, Container } from '@mui/material';
+import CoinCard from './CoinCard';
 
-const useStyles= makeStyles(()=>({
-  banner: {
-    backgroundImage: "url('/banner.png')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  },
-  bannerContent : {
-    height: 400,
-    display: "flex",
-    // flexDirection: "column",
-    // paddingTop: 25,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  tagline: {
-    display: "flex",
-    // height: "40%",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
-  },
-  
-}));
-
-const Banner = () => {
-  const classes= useStyles();
-
-  return <div className={classes.banner}>
-    <Container className={classes.bannerContent}>
-    <div className={classes.tagline}>
+const Banner = ({ coins }) => {
+  return (
+    <Box sx={{ bgcolor: '#14161a', py: 8, minHeight: '400px' }} className="relative">
+      <Container>
         <Typography
-          variant='h2'
-          style={{
-            fontWeight: "bold",
-            marginBottom: 15,
-            fontFamily: "Montserrat",
+          variant="h2"
+          sx={{
+            color: '#ffd700',
+            mb: 6,
+            textAlign: 'center',
+            fontWeight: 'bold',
+            zIndex: 10,
+            position: 'relative',
           }}
         >
           Crypto Hunter
         </Typography>
-        <Typography
-          variant='subtitle2'
-          style={{
-            color: "darkgrey",
-            textTransform: "capitalize",
-            fontFamily: "Montserrat",
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 3,
+            justifyContent: 'center',
+            position: 'relative',
+            zIndex: 5,
           }}
         >
-          Get all the Info regarding your favourite Crypto Currrency
-        </Typography>
+          {coins.slice(0, 3).map(coin => (
+            <CoinCard key={coin.id} coin={coin} />
+          ))}
+        </Box>
+      </Container>
+    </Box>
+  );
+};
 
-      </div>
-      <Carousel/>
-    </Container>
-
-  </div>
-  
-}
-
-export default Banner
+export default Banner;
