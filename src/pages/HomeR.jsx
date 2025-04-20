@@ -2,14 +2,12 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Box } from '@mui/material';
 import axios from 'axios';
-import SearchBar from '../components/SearchBar';
-import CoinCard from '../components/CoinCard';
 import Banner from '../components/Banner';
+import CoinCard from '../components/CoinCard';
 import { CoinList } from '../config/api';
 
 const Home = () => {
   const [coins, setCoins] = useState([]);
-  const [filteredCoins, setFilteredCoins] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,9 +16,7 @@ const Home = () => {
         const { data } = await axios.get(CoinList('usd'), {
           headers: { 'x-cg-demo-api-key': 'CG-7nVcnFKTaKahCh2VvxTGZY7L' },
         });
-        console.log('API Response:', data); // Log response
         setCoins(data);
-        setFilteredCoins(data);
         setLoading(false);
       } catch (error) {
         console.error('API Error:', error.message);
@@ -30,24 +26,19 @@ const Home = () => {
     fetchCoins();
   }, []);
 
+  if (loading) return <Typography className="text-white text-center mt-10">Loading...</Typography>;
+
   return (
     <Box className="bg-gray-900 min-h-screen text-white">
-      <Banner />
+      <Banner coins={coins} />
       <Container sx={{ py: 6 }}>
-        <Typography variant="h4" className="text-blue-400 mb-4">Top Cryptocurrencies</Typography>
-        <SearchBar onSearch={(term) => {
-          const results = coins.filter(coin =>
-            coin.name.toLowerCase().includes(term.toLowerCase()) ||
-            coin.symbol.toLowerCase().includes(term.toLowerCase())
-          );
-          setFilteredCoins(results);
-        }} />
+        <Typography variant="h4" align="center" gutterBottom className="text-blue-400">
+          Top Cryptocurrencies
+        </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center' }}>
-          {loading ? (
-            <Typography className="text-white">Loading...</Typography>
-          ) : (
-            filteredCoins.map(coin => <CoinCard key={coin.id} coin={coin} />)
-          )}
+          {coins.slice(0, 6).map(coin => (
+            <CoinCard key={coin.id} coin={coin} />
+          ))}
         </Box>
       </Container>
     </Box>

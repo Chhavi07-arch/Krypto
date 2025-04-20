@@ -6,18 +6,21 @@ import Home from './pages/Home';
 import Rates from './pages/Rates';
 import News from './pages/News';
 import Learn from './pages/Learn';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   return (
     <FavoritesProvider>
       <BrowserRouter>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/rates" element={<Rates />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/learn" element={<Learn />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/rates" element={<Rates />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/learn" element={<Learn />} />
+          </Routes>
+        </ErrorBoundary>
       </BrowserRouter>
     </FavoritesProvider>
   );

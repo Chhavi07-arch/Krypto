@@ -55,9 +55,7 @@ const Rates = () => {
   };
 
   const handleTimeFrameChange = (days) => {
-    if (selectedCoin) {
-      fetchChartData(selectedCoin.id, days);
-    }
+    if (selectedCoin) fetchChartData(selectedCoin.id, days);
   };
 
   if (loading) return <Typography className="text-white text-center mt-10">Loading...</Typography>;
@@ -65,22 +63,18 @@ const Rates = () => {
   return (
     <Box className="bg-gray-900 min-h-screen text-white">
       <Container sx={{ py: 6 }}>
-        <Typography variant="h4" gutterBottom className="text-blue-400">
-          Cryptocurrency Rates
-        </Typography>
+        <Typography variant="h4" className="text-blue-400 mb-4">Cryptocurrency Rates</Typography>
         <SearchBar onSearch={handleSearch} />
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center' }}>
           {filteredCoins.map(coin => (
-            <Box key={coin.id} onClick={() => { setSelectedCoin(coin); fetchChartData(coin.id, '7'); }}>
+            <Box key={coin.id} onClick={() => { setSelectedCoin(coin); fetchChartData(coin.id, 7); }}>
               <CoinCard coin={coin} />
             </Box>
           ))}
         </Box>
         {selectedCoin && (
           <Box sx={{ mt: 4 }}>
-            <Typography variant="h5" className="text-blue-400 mb-2">
-              {selectedCoin.name} Price History
-            </Typography>
+            <Typography variant="h5" className="text-blue-400 mb-2">{selectedCoin.name} Price History</Typography>
             <PriceChart data={chartData} onTimeFrameChange={handleTimeFrameChange} />
           </Box>
         )}
