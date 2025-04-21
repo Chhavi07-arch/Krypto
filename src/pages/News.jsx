@@ -1,4 +1,3 @@
-// src/pages/News.jsx
 import { useState, useEffect } from 'react';
 import { Container, Typography, Box, TextField, Button } from '@mui/material';
 import newsData from '../assets/news.json';

@@ -17,24 +17,3 @@ body {
 .text-blue-400 { color: #60a5fa; }
 .bg-blue-600 { background-color: #2563eb; }
 
-@keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0); }
-}
-
-@keyframes float-slow {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-  100% { transform: translateY(0); }
-}
-
-@keyframes float-fast {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-25px); }
-  100% { transform: translateY(0); }
-}
-
-.animate-float { animation: float 4s ease-in-out infinite; }
-.animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
-.animate-float-fast { animation: float-fast 3s ease-in-out infinite; }

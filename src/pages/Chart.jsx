@@ -1,11 +1,10 @@
-// src/pages/Chart.jsx
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Typography, Box, Button } from '@mui/material';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import chartData from '../assets/chartData.json'; // Mock data
+import chartData from '../assets/chartData.json'; 
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 

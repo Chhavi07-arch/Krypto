@@ -1,11 +1,10 @@
-// src/pages/Favorites.jsx
 import { useState, useEffect } from 'react';
 import { Container, Typography, Box } from '@mui/material';
 import { useFavorites } from '../context/FavoritesContext';
 import CoinCard from '../components/CoinCard';
 
 const Favorites = () => {
-  const { favorites } = useFavorites(); // Only need favorites from context to display
+  const { favorites } = useFavorites(); 
   const [localFavorites, setLocalFavorites] = useState([]);
 
   useEffect(() => {

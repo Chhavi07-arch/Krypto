@@ -1,4 +1,3 @@
-// src/components/Banner.jsx
 import { Typography, Box } from '@mui/material';
 
 const Banner = () => {

@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import { AppBar, Toolbar, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 
