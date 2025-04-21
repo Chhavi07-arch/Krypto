@@ -1,11 +1,19 @@
 // src/pages/News.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Typography, Box, TextField, Button } from '@mui/material';
 import newsData from '../assets/news.json';
 
 const News = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [subscribedEmails, setSubscribedEmails] = useState([]);
+
+  useEffect(() => {
+    const savedEmails = localStorage.getItem('subscribedEmails');
+    if (savedEmails) {
+      setSubscribedEmails(JSON.parse(savedEmails));
+    }
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,6 +22,9 @@ const News = () => {
       return;
     }
     setError('');
+    const updatedEmails = [...subscribedEmails, email];
+    setSubscribedEmails(updatedEmails);
+    localStorage.setItem('subscribedEmails', JSON.stringify(updatedEmails));
     alert('Subscribed to newsletter!');
     setEmail('');
   };
@@ -59,6 +70,16 @@ const News = () => {
               Subscribe
             </Button>
           </Box>
+          {subscribedEmails.length > 0 && (
+            <Box sx={{ mt: 2 }}>
+              <Typography className="text-white">Subscribed Emails:</Typography>
+              <ul>
+                {subscribedEmails.map((email, index) => (
+                  <li key={index} className="text-blue-400">{email}</li>
+                ))}
+              </ul>
+            </Box>
+          )}
         </Box>
       </Container>
     </Box>
