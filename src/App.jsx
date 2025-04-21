@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Rates from './pages/Rates';
 import News from './pages/News';
 import Learn from './pages/Learn';
+import Chart from './pages/Chart';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/rates" element={<Rates />} />
             <Route path="/news" element={<News />} />
             <Route path="/learn" element={<Learn />} />
+            <Route path="/chart/:coinId" element={<Chart />} />
           </Routes>
         </ErrorBoundary>
       </BrowserRouter>

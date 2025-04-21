@@ -1,6 +1,7 @@
 // src/pages/Rates.jsx
 import { useState, useEffect } from 'react';
 import { Container, Typography, Box } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import SearchBar from '../components/SearchBar';
 import PriceChart from '../components/PriceChart';
@@ -13,6 +14,8 @@ const Rates = () => {
   const [selectedCoin, setSelectedCoin] = useState(null);
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const coinId = searchParams.get('coin');
 
   useEffect(() => {
     const fetchCoins = async () => {
@@ -23,13 +26,17 @@ const Rates = () => {
         setCoins(data);
         setFilteredCoins(data);
         setLoading(false);
+        if (coinId && data.find(c => c.id === coinId)) {
+          setSelectedCoin(data.find(c => c.id === coinId));
+          fetchChartData(coinId, 7);
+        }
       } catch (error) {
         console.error('API Error:', error.message);
         setLoading(false);
       }
     };
     fetchCoins();
-  }, []);
+  }, [coinId]);
 
   const handleSearch = (searchTerm) => {
     const results = coins.filter(coin =>
@@ -67,12 +74,10 @@ const Rates = () => {
         <SearchBar onSearch={handleSearch} />
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center' }}>
           {filteredCoins.map(coin => (
-            <Box key={coin.id} onClick={() => { setSelectedCoin(coin); fetchChartData(coin.id, 7); }}>
-              <CoinCard coin={coin} />
-            </Box>
+            <CoinCard key={coin.id} coin={coin} />
           ))}
         </Box>
-        {selectedCoin && (
+        {selectedCoin && chartData.length > 0 && (
           <Box sx={{ mt: 4 }}>
             <Typography variant="h5" className="text-blue-400 mb-2">{selectedCoin.name} Price History</Typography>
             <PriceChart data={chartData} onTimeFrameChange={handleTimeFrameChange} />

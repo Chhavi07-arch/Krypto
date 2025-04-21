@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from 'react';
 
 const FavoritesContext = createContext();
 
-export const FavoritesProvider = ({ children }) => {
+export function FavoritesProvider({ children }) {
   const [favorites, setFavorites] = useState([]);
 
   const addFavorite = (coin) => {
@@ -21,6 +21,6 @@ export const FavoritesProvider = ({ children }) => {
       {children}
     </FavoritesContext.Provider>
   );
-};
+}
 
 export const useFavorites = () => useContext(FavoritesContext);
