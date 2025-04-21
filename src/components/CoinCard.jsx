@@ -4,9 +4,8 @@ import { useFavorites } from '../context/FavoritesContext';
 import { useNavigate } from 'react-router-dom';
 
 const CoinCard = ({ coin }) => {
-  const { favorites, addFavorite } = useFavorites();
+  const { favorites, addFavorite, removeFavorite } = useFavorites();
   const navigate = useNavigate();
-
   const isFavorite = favorites.some(fav => fav.id === coin.id);
 
   return (
@@ -24,14 +23,23 @@ const CoinCard = ({ coin }) => {
       <Typography className={`text-center ${coin.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
         24h: {coin.price_change_percentage_24h.toFixed(2)}%
       </Typography>
-      <Button
-        variant="contained"
-        className="w-full mt-2 bg-blue-600"
-        disabled={isFavorite}
-        onClick={() => addFavorite(coin)}
-      >
-        {isFavorite ? 'Favorite' : 'Add Favorite'}
-      </Button>
+      {isFavorite ? (
+        <Button
+          variant="contained"
+          className="w-full mt-2 bg-red-600"
+          onClick={() => removeFavorite(coin.id)}
+        >
+          Remove Favorite
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          className="w-full mt-2 bg-blue-600"
+          onClick={() => addFavorite(coin)}
+        >
+          Add Favorite
+        </Button>
+      )}
     </Box>
   );
 };
