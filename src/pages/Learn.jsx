@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { Container, Typography, Box, TextField, Button } from '@mui/material';
 import { useFavorites } from '../context/FavoritesContext';
-import CoinCard from '../components/CoinCard';
 
 const Learn = () => {
   const [feedback, setFeedback] = useState('');
@@ -23,6 +22,8 @@ const Learn = () => {
   const videos = [
     { title: 'Crypto for Beginners', url: 'https://www.youtube.com/watch?v=SkRwB6Wha28' },
     { title: 'How to Invest in Crypto', url: 'https://www.youtube.com/watch?v=2x3Qfr7V6PA' },
+    { title: 'Understanding Blockchain', url: 'https://www.youtube.com/watch?v=SSo_EIwHSd4' },
+    { title: 'Crypto Trading Strategies', url: 'https://www.youtube.com/watch?v=8X8zVYk8Q-c' },
   ];
 
   return (
@@ -45,16 +46,7 @@ const Learn = () => {
             </Box>
           ))}
         </Box>
-        <Typography variant="h5" className="text-blue-400 mb-2">
-          Your Favorite Coins
-        </Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4 }}>
-          {favorites.length ? favorites.map(coin => (
-            <CoinCard key={coin.id} coin={coin} />
-          )) : (
-            <Typography>No favorites yet. Add some from the Rates page!</Typography>
-          )}
-        </Box>
+       
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4 }}>
           <Typography variant="h5" className="text-blue-400 mb-2">
             Share Your Feedback

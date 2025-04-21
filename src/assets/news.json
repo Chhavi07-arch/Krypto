@@ -1,15 +1,10 @@
 
 [
-    {
-      "title": "Bitcoin Surges Past $70K",
-      "summary": "Bitcoin reaches a new high as institutional adoption grows."
-    },
-    {
-      "title": "Ethereum Plans Major Upgrade",
-      "summary": "Ethereum's next update aims to improve scalability and reduce fees."
-    },
-    {
-      "title": "Crypto Market Cap Hits $3T",
-      "summary": "The global crypto market cap reaches a new milestone."
-    }
-  ]
+  {"title": "Bitcoin Hits All-Time High of $88,000", "summary": "Bitcoin reached a new peak on April 20, 2025."},
+  {"title": "Ethereum Upgrade Boosts Transaction Speed", "summary": "Ethereum's latest upgrade enhances performance on April 19, 2025."},
+  {"title": "Cardano Announces New Staking Rewards", "summary": "Cardano introduces updated staking incentives on April 18, 2025."},
+  {"title": "XRP Lawsuit Update: Positive Ruling", "summary": "A favorable ruling boosts XRP's market on April 17, 2025."},
+  {"title": "Solana Network Sees Record Activity", "summary": "Solana hits record transaction volumes on April 16, 2025."},
+  {"title": "Binance Adds New Trading Pairs", "summary": "Binance expands options for traders on April 15, 2025."},
+  {"title": "Ripple CEO Comments on Future Growth", "summary": "Ripple's CEO shares insights on April 14, 2025."}
+]

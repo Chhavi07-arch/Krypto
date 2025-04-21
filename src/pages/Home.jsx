@@ -1,6 +1,6 @@
 // src/pages/Home.jsx
 import { useState, useEffect } from 'react';
-import { Container, Typography, Box, Button } from '@mui/material'; // Add Button here
+import { Container, Typography, Box } from '@mui/material';
 import axios from 'axios';
 import SearchBar from '../components/SearchBar';
 import CoinCard from '../components/CoinCard';
@@ -12,7 +12,8 @@ const Home = () => {
   const [filteredCoins, setFilteredCoins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const coinsPerPage = 6;
+  const [searchTerm, setSearchTerm] = useState('');
+  const coinsPerPage = 10;
 
   useEffect(() => {
     const fetchCoins = async () => {
@@ -31,12 +32,17 @@ const Home = () => {
     fetchCoins();
   }, []);
 
-  const handleSearch = (searchTerm) => {
-    const results = coins.filter(coin =>
-      coin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      coin.symbol.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredCoins(results);
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    if (term) {
+      const results = coins.filter(coin =>
+        coin.name.toLowerCase().startsWith(term.toLowerCase()) ||
+        coin.symbol.toLowerCase().startsWith(term.toLowerCase())
+      );
+      setFilteredCoins(results);
+    } else {
+      setFilteredCoins(coins);
+    }
     setCurrentPage(1); // Reset to first page on search
   };
 
@@ -54,21 +60,19 @@ const Home = () => {
       <Banner />
       <Container sx={{ py: 6 }}>
         <Typography variant="h4" className="text-blue-400 mb-4">Top Cryptocurrencies</Typography>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} value={searchTerm} />
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center' }}>
           {currentCoins.map(coin => <CoinCard key={coin.id} coin={coin} />)}
         </Box>
-        <Box className="mt-4 flex justify-center gap-2">
+        <Box className="mt-4 flex justify-center gap-1">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
-            <Button
+            <span
               key={number}
-              variant="contained"
-              className="bg-blue-600"
+              className={`px-2 py-1 text-sm text-gray-300 hover:text-white cursor-pointer ${currentPage === number ? 'bg-blue-600 text-white' : ''}`}
               onClick={() => paginate(number)}
-              disabled={currentPage === number}
             >
               {number}
-            </Button>
+            </span>
           ))}
         </Box>
       </Container>
