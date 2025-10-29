@@ -4,7 +4,7 @@ Welcome to **Krypto**, a robust and user-friendly cryptocurrency tracking and le
 
 ## Live Demo
 
-Check out the live version of Krypto here: [https://krypto-project.vercel.app](https://krypto-project.vercel.app) 
+Check out the live version of Krypto here: https://krypto-seven-alpha.vercel.app/ 
 
 
 ## Features
