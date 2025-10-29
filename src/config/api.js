@@ -1,4 +1,7 @@
 // src/config/api.js
+
+// CoinGecko - Free tier (no API key required)
+// For higher rate limits, optionally set VITE_COINGECKO_API_KEY in .env
 const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY || '';
 
 const getHeaders = () => {
@@ -16,3 +19,17 @@ export const HistoricalChart = (id, days, currency) =>
     `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`;
 
 export { getHeaders };
+
+// ALTERNATIVE API ENDPOINTS (Optional - for switching providers)
+// CoinPaprika (Free alternative, no API key needed)
+export const CoinPaprika = {
+  coinList: () => 'https://api.coinpaprika.com/v1/coins',
+  coinMarkets: () => 'https://api.coinpaprika.com/v1/tickers?quotes=USD&limit=100',
+  historicalChart: (id, days) => `https://api.coinpaprika.com/v1/coins/${id}/ohlcv/historical?quotes=USD&limit=${days}`,
+};
+
+// CryptoCompare (Free tier: 100k calls/day)
+export const CryptoCompare = {
+  coinList: () => 'https://api.cryptocompare.com/data/top/mktcapfull?limit=100&tsym=USD&api_key=YOUR_KEY',
+  historicalChart: (id, days) => `https://api.cryptocompare.com/data/v2/histoday?fsym=${id}&tsym=USD&limit=${days}`,
+};
