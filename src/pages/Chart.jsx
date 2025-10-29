@@ -4,7 +4,8 @@ import { Typography, Box, Button } from '@mui/material';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import chartData from '../assets/chartData.json'; 
+import chartData from '../assets/chartData.json';
+import { getHeaders } from '../config/api'; 
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -14,6 +15,7 @@ const Chart = () => {
   const [chartDataState, setChartDataState] = useState([]);
   const [days, setDays] = useState(7);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const cachedData = localStorage.getItem(`chart_${coinId}_${days}`);
@@ -29,12 +31,13 @@ const Chart = () => {
 
     const fetchData = async () => {
       try {
+        setError('');
         const { data: coinData } = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinId}`, {
-          headers: { 'x-cg-demo-api-key': 'CG-7nVcnFKTaKahCh2VvxTGZY7L' },
+          headers: getHeaders(),
         });
         setCoin(coinData);
         const { data: chartResponse } = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`, {
-          headers: { 'x-cg-demo-api-key': 'CG-7nVcnFKTaKahCh2VvxTGZY7L' },
+          headers: getHeaders(),
         });
         const formattedData = chartResponse.prices.map(([timestamp, price]) => ({ date: new Date(timestamp).toLocaleDateString(), price }));
         setChartDataState(formattedData);
@@ -42,6 +45,7 @@ const Chart = () => {
         setIsLoading(false);
       } catch (error) {
         console.error('Chart Data Error:', error.message);
+        setError('Failed to load chart data. Showing cached data.');
         setChartDataState(chartData.prices.map(([timestamp, price]) => ({ date: new Date(timestamp).toLocaleDateString(), price }))); // Fallback to mock
         setIsLoading(false);
       }
@@ -52,7 +56,7 @@ const Chart = () => {
   const fetchCoinDetails = async () => {
     try {
       const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinId}`, {
-        headers: { 'x-cg-demo-api-key': 'CG-7nVcnFKTaKahCh2VvxTGZY7L' },
+        headers: getHeaders(),
       });
       setCoin(data);
     } catch (error) {
@@ -86,6 +90,11 @@ const Chart = () => {
 
   return (
     <Box className="bg-gray-900 min-h-screen text-white p-6">
+      {error && (
+        <Box sx={{ mb: 4, p: 2, bgcolor: '#ff9800', borderRadius: 1 }}>
+          <Typography className="text-white">{error}</Typography>
+        </Box>
+      )}
       <Box className="flex items-center mb-6">
         <img src={coin?.image?.large} alt={coin?.name} className="w-16 h-16 mr-4" />
         <Box>

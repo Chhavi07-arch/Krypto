@@ -4,12 +4,13 @@ import axios from 'axios';
 import SearchBar from '../components/SearchBar';
 import CoinCard from '../components/CoinCard';
 import Banner from '../components/Banner';
-import { CoinList } from '../config/api';
+import { CoinList, getHeaders } from '../config/api';
 
 const Home = () => {
   const [coins, setCoins] = useState([]);
   const [filteredCoins, setFilteredCoins] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const coinsPerPage = 10;
@@ -17,14 +18,16 @@ const Home = () => {
   useEffect(() => {
     const fetchCoins = async () => {
       try {
+        setError('');
         const { data } = await axios.get(CoinList('usd'), {
-          headers: { 'x-cg-demo-api-key': 'CG-7nVcnFKTaKahCh2VvxTGZY7L' },
+          headers: getHeaders(),
         });
         setCoins(data);
         setFilteredCoins(data);
         setLoading(false);
       } catch (error) {
         console.error('API Error:', error.message);
+        setError('Failed to load cryptocurrencies. Please try again later.');
         setLoading(false);
       }
     };
@@ -58,6 +61,11 @@ const Home = () => {
     <Box className="bg-gray-900 min-h-screen text-white">
       <Banner />
       <Container sx={{ py: 6 }}>
+        {error && (
+          <Box sx={{ mb: 4, p: 2, bgcolor: '#d32f2f', borderRadius: 1 }}>
+            <Typography className="text-white">{error}</Typography>
+          </Box>
+        )}
         <Typography variant="h4" className="text-blue-400 mb-4">Top Cryptocurrencies</Typography>
         <SearchBar onSearch={handleSearch} value={searchTerm} />
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center' }}>

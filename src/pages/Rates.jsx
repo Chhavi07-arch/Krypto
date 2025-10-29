@@ -5,7 +5,7 @@ import axios from 'axios';
 import SearchBar from '../components/SearchBar';
 import PriceChart from '../components/PriceChart';
 import CoinCard from '../components/CoinCard';
-import { CoinList, HistoricalChart } from '../config/api';
+import { CoinList, HistoricalChart, getHeaders } from '../config/api';
 
 const Rates = () => {
   const [coins, setCoins] = useState([]);
@@ -13,14 +13,16 @@ const Rates = () => {
   const [selectedCoin, setSelectedCoin] = useState(null);
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [searchParams] = useSearchParams();
   const coinId = searchParams.get('coin');
 
   useEffect(() => {
     const fetchCoins = async () => {
       try {
+        setError('');
         const { data } = await axios.get(CoinList('usd'), {
-          headers: { 'x-cg-demo-api-key': 'CG-7nVcnFKTaKahCh2VvxTGZY7L' },
+          headers: getHeaders(),
         });
         setCoins(data);
         setFilteredCoins(data);
@@ -31,6 +33,7 @@ const Rates = () => {
         }
       } catch (error) {
         console.error('API Error:', error.message);
+        setError('Failed to load cryptocurrency rates. Please try again later.');
         setLoading(false);
       }
     };
@@ -48,7 +51,7 @@ const Rates = () => {
   const fetchChartData = async (coinId, days) => {
     try {
       const { data } = await axios.get(HistoricalChart(coinId, days, 'usd'), {
-        headers: { 'x-cg-demo-api-key': 'CG-7nVcnFKTaKahCh2VvxTGZY7L' },
+        headers: getHeaders(),
       });
       setChartData(data.prices.map(([timestamp, price]) => ({
         date: new Date(timestamp).toLocaleDateString(),
@@ -69,6 +72,11 @@ const Rates = () => {
   return (
     <Box className="bg-gray-900 min-h-screen text-white">
       <Container sx={{ py: 6 }}>
+        {error && (
+          <Box sx={{ mb: 4, p: 2, bgcolor: '#d32f2f', borderRadius: 1 }}>
+            <Typography className="text-white">{error}</Typography>
+          </Box>
+        )}
         <Typography variant="h4" className="text-blue-400 mb-4">Cryptocurrency Rates</Typography>
         <SearchBar onSearch={handleSearch} />
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center' }}>

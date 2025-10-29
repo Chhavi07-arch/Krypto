@@ -7,22 +7,14 @@ const CoinCard = ({ coin }) => {
   const navigate = useNavigate();
   const isFavorite = favorites.some(fav => fav.id === coin.id);
 
-  
-  const syncFavorites = (updatedFavorites) => {
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-  };
-
   const handleAddFavorite = (e) => {
     e.stopPropagation();
     addFavorite(coin);
-    syncFavorites([...favorites, coin]);
   };
 
   const handleRemoveFavorite = (e) => {
     e.stopPropagation();
     removeFavorite(coin.id);
-    const updatedFavorites = favorites.filter(fav => fav.id !== coin.id);
-    syncFavorites(updatedFavorites);
   };
 
   return (
@@ -38,7 +30,7 @@ const CoinCard = ({ coin }) => {
         {coin.name} ({coin.symbol.toUpperCase()})
       </Typography>
       <Typography className="text-center">Price: ${coin.current_price.toLocaleString()}</Typography>
-      <Typography className={`text-center ${coin.price_change_percentage_24h >= 0 ? 'color: #00cc00' : 'color: #ff0000'}`}>
+      <Typography className="text-center" style={{ color: coin.price_change_percentage_24h >= 0 ? '#00cc00' : '#ff0000' }}>
         24h: {coin.price_change_percentage_24h.toFixed(2)}%
       </Typography>
       {isFavorite ? (
