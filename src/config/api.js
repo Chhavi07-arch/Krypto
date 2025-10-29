@@ -21,14 +21,22 @@ export const HistoricalChart = (id, days, currency) =>
 export { getHeaders };
 
 // News APIs
-// CryptoPanic - Real crypto news (Free, no API key needed for basic access)
-export const CryptoPanic = {
-  news: () => 'https://cryptopanic.com/api/v1/posts/?auth=null&kind=news&public=true&limit=20',
+// Using CORS-enabled alternatives due to CORS restrictions on direct API calls
+
+// Option 1: NewsAPI - Free tier, CORS enabled
+export const NewsAPI = {
+  news: () => 'https://newsapi.org/v2/everything?q=cryptocurrency&sortBy=publishedAt&language=en&pageSize=20&apiKey=demo',
 };
 
-// NewsAPI - Alternative news source (requires API key)
-export const NewsAPI = {
-  news: () => 'https://newsapi.org/v2/everything?q=cryptocurrency&sortBy=publishedAt&language=en&pageSize=20',
+// Option 2: Crypto news via alternative endpoint (CORS-friendly)
+export const CryptoNews = {
+  // Using public endpoint that supports CORS
+  news: () => 'https://api.coincap.io/v2/assets?limit=50',
+};
+
+// CryptoPanic API (has CORS issues, kept for reference)
+export const CryptoPanic = {
+  news: () => 'https://cryptopanic.com/api/v1/posts/?auth=null&kind=news&public=true&limit=20',
 };
 
 // ALTERNATIVE API ENDPOINTS (Optional - for switching providers)

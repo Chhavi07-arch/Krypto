@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Box, TextField, Button, Card, CardContent, Link, Chip } from '@mui/material';
 import axios from 'axios';
-import { CryptoPanic } from '../config/api';
 
 const News = () => {
   const [news, setNews] = useState([]);
@@ -23,14 +22,34 @@ const News = () => {
   const fetchNews = async () => {
     try {
       setError('');
-      const { data } = await axios.get(CryptoPanic.news());
-      setNews(data.results || []);
-      setLoading(false);
+      // Using NewsAPI with demo key (limited but works)
+      // Alternative: You can get your own free key from https://newsapi.org
+      const { data } = await axios.get(
+        'https://newsapi.org/v2/everything?q=cryptocurrency&sortBy=publishedAt&language=en&pageSize=20&apiKey=demo'
+      );
+
+      if (data.articles) {
+        setNews(data.articles);
+        setLoading(false);
+      } else {
+        throw new Error('No articles found');
+      }
     } catch (err) {
       console.error('News API Error:', err.message);
-      setError('Failed to load latest news. Please try again later.');
+      // Fallback: Show cached news or user-friendly message
+      setError('News API limit reached. Try again later or get your free API key from newsapi.org');
+      setNews(getCachedNews());
       setLoading(false);
     }
+  };
+
+  // Fallback news data when API fails
+  const getCachedNews = () => {
+    const cached = localStorage.getItem('cachedNews');
+    if (cached) {
+      return JSON.parse(cached);
+    }
+    return [];
   };
 
   const handleSubmit = (e) => {
@@ -53,21 +72,8 @@ const News = () => {
 
   const filteredNews = news.filter(article =>
     article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    article.source?.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    article.source?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const getSentimentColor = (sentiment) => {
-    switch (sentiment) {
-      case 'positive':
-        return '#4caf50';
-      case 'negative':
-        return '#f44336';
-      case 'neutral':
-        return '#ff9800';
-      default:
-        return '#2196f3';
-    }
-  };
 
   const formatDate = (dateString) => {
     try {
@@ -145,74 +151,56 @@ const News = () => {
                 sx={{
                   bgcolor: '#1a1c22',
                   color: 'white',
-                  borderLeft: `4px solid ${getSentimentColor(article.sentiment)}`,
+                  borderLeft: `4px solid #2196f3`,
                   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                   '&:hover': {
                     transform: 'translateY(-5px)',
-                    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+                    boxShadow: '0 8px 16px rgba(33, 150, 243, 0.3)',
                   },
                 }}
               >
                 <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 1 }}>
-                    <Typography variant="h6" sx={{ flex: 1, pr: 1, fontSize: '1.1rem', fontWeight: 600 }}>
-                      {article.title}
-                    </Typography>
-                    {article.sentiment && (
-                      <Chip
-                        label={article.sentiment.toUpperCase()}
-                        sx={{
-                          bgcolor: getSentimentColor(article.sentiment),
-                          color: '#fff',
-                          fontSize: '0.7rem',
-                          fontWeight: 'bold',
-                          minWidth: '80px',
-                        }}
-                      />
-                    )}
-                  </Box>
+                  {/* Image */}
+                  {article.urlToImage && (
+                    <Box
+                      component="img"
+                      src={article.urlToImage}
+                      alt={article.title}
+                      sx={{
+                        width: '100%',
+                        height: '180px',
+                        objectFit: 'cover',
+                        borderRadius: 1,
+                        mb: 2,
+                      }}
+                    />
+                  )}
 
-                  <Typography variant="caption" className="text-gray-400" sx={{ display: 'block', mb: 2 }}>
-                    Source: {article.source?.title || 'Unknown'} • {formatDate(article.published_at)}
+                  <Typography variant="h6" sx={{ fontSize: '1.1rem', fontWeight: 600, mb: 1 }}>
+                    {article.title}
                   </Typography>
 
-                  {article.domain && (
-                    <Typography variant="body2" sx={{ mb: 2, color: '#90caf9' }}>
-                      Domain: {article.domain}
+                  <Typography variant="caption" className="text-gray-400" sx={{ display: 'block', mb: 2 }}>
+                    Source: {article.source?.name || 'Unknown'} • {formatDate(article.publishedAt)}
+                  </Typography>
+
+                  {article.description && (
+                    <Typography variant="body2" sx={{ mb: 2, color: '#ccc', lineHeight: 1.5 }}>
+                      {article.description.substring(0, 150)}...
                     </Typography>
                   )}
 
-                  {/* Coins mentioned */}
-                  {article.currencies && article.currencies.length > 0 && (
-                    <Box sx={{ mb: 2 }}>
-                      <Typography variant="caption" className="text-gray-400">Mentioned coins:</Typography>
-                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 1 }}>
-                        {article.currencies.slice(0, 3).map((coin, idx) => (
-                          <Chip
-                            key={idx}
-                            label={coin.code}
-                            size="small"
-                            sx={{
-                              bgcolor: '#2196f3',
-                              color: '#fff',
-                              fontSize: '0.8rem',
-                            }}
-                          />
-                        ))}
-                        {article.currencies.length > 3 && (
-                          <Chip
-                            label={`+${article.currencies.length - 3}`}
-                            size="small"
-                            sx={{
-                              bgcolor: '#666',
-                              color: '#fff',
-                              fontSize: '0.8rem',
-                            }}
-                          />
-                        )}
-                      </Box>
-                    </Box>
-                  )}
+                  <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                    <Chip
+                      label="Crypto"
+                      size="small"
+                      sx={{
+                        bgcolor: '#ff9800',
+                        color: '#fff',
+                        fontSize: '0.8rem',
+                      }}
+                    />
+                  </Box>
 
                   <Link
                     href={article.url}
@@ -236,7 +224,7 @@ const News = () => {
             ))
           ) : (
             <Typography className="text-center text-gray-400 col-span-2">
-              No news articles found matching your search.
+              {news.length === 0 && !error ? 'Loading news...' : 'No news articles found matching your search.'}
             </Typography>
           )}
         </Box>
